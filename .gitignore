@@ -1,0 +1,15 @@
+# Never commit these
+.env
+*.env
+__pycache__/
+*.pyc
+*.pyo
+dist/
+build/
+*.spec
+.DS_Store
+Thumbs.db
+*.log
+
+# Keep these out of repo (set in Render dashboard instead)
+config.json

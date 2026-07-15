@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+asyncpg
+python-dotenv
+pydantic
+httpx
+websockets
+razorpay

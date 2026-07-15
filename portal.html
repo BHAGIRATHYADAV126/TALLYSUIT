@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tally Suite — Smart Tally Tools for Indian Businesses</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1f2e;--ink-soft:#4a5168;--ink-faint:#8b93a8;
+  --paper:#f7f6f2;--white:#fff;
+  --accent:#1a6b3c;--accent-lt:#e6f4ec;--accent-dk:#145530;
+  --warn:#b84c00;--border:#dddbd4;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+}
+body{font-family:var(--sans);background:var(--white);color:var(--ink);font-size:15px;line-height:1.6}
+
+/* ── NAV ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:14px 40px;border-bottom:1px solid var(--border);background:var(--white);position:sticky;top:0;z-index:100}
+.logo{font-weight:700;font-size:18px;letter-spacing:-.5px}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500}
+.nav-links a:hover{color:var(--accent)}
+.btn{display:inline-block;padding:9px 22px;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .15s}
+.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:var(--accent)}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border)}.btn-outline:hover{border-color:var(--ink)}
+.btn-green{background:var(--accent);color:#fff}.btn-green:hover{background:var(--accent-dk)}
+.btn-lg{padding:13px 32px;font-size:15px}
+.btn-block{width:100%;text-align:center;padding:12px}
+
+/* ── HERO ── */
+.hero{padding:80px 40px 60px;max-width:1100px;margin:0 auto;text-align:center}
+.hero-tag{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.hero h1{font-size:clamp(32px,5vw,56px);font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px}
+.hero h1 span{color:var(--accent)}
+.hero p{font-size:18px;color:var(--ink-soft);max-width:600px;margin:0 auto 36px;font-weight:300}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-note{margin-top:14px;font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+
+/* ── FEATURES ── */
+.section{padding:64px 40px;max-width:1100px;margin:0 auto}
+.section-tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.section h2{font-size:clamp(24px,3vw,36px);font-weight:700;letter-spacing:-.5px;margin-bottom:40px}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.feature-card{border:1px solid var(--border);border-radius:10px;padding:28px;transition:box-shadow .2s}
+.feature-card:hover{box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.feat-icon{font-size:28px;margin-bottom:14px}
+.feature-card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.feature-card p{font-size:13px;color:var(--ink-soft);line-height:1.6}
+.badge{display:inline-block;font-size:11px;font-family:var(--mono);background:var(--accent-lt);color:var(--accent);padding:2px 8px;border-radius:20px;margin-top:10px}
+
+/* ── PRICING ── */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:8px}
+.plan-card{border:1px solid var(--border);border-radius:10px;padding:28px;position:relative}
+.plan-card.featured{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-lt)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:11px;font-family:var(--mono);padding:3px 14px;border-radius:20px;white-space:nowrap}
+.plan-name{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px}
+.plan-price{font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:4px}
+.plan-price span{font-size:15px;font-weight:400;color:var(--ink-soft)}
+.plan-desc{font-size:13px;color:var(--ink-faint);margin-bottom:20px}
+.plan-features{list-style:none;margin-bottom:24px}
+.plan-features li{font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.plan-features li::before{content:"✓";color:var(--accent);font-weight:700;flex-shrink:0}
+
+/* ── AUTH MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--white);border-radius:12px;padding:40px;width:100%;max-width:420px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-close{position:absolute;top:14px;right:18px;font-size:20px;cursor:pointer;color:var(--ink-faint);background:none;border:none;line-height:1}
+.modal h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.modal p{font-size:13px;color:var(--ink-soft);margin-bottom:24px}
+.tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.tab{padding:8px 20px;font-size:14px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--ink-soft);background:none;border-top:none;border-left:none;border-right:none}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--ink-soft);margin-bottom:5px}
+.form-group input{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:5px;font-size:14px;font-family:var(--sans);outline:none;transition:border-color .15s}
+.form-group input:focus{border-color:var(--accent)}
+.form-msg{font-size:12px;min-height:18px;margin-top:10px;text-align:center}
+.form-msg.ok{color:var(--accent)}.form-msg.err{color:var(--warn)}
+
+/* ── DASHBOARD ── */
+#dashboard{display:none;padding:40px;max-width:900px;margin:0 auto}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
+.dash-header h2{font-size:22px;font-weight:700}
+.status-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;font-family:var(--mono)}
+.pill-trial{background:#fff8e6;color:#b87000}.pill-active{background:var(--accent-lt);color:var(--accent)}.pill-expired{background:#fde8e8;color:#c0392b}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{border:1px solid var(--border);border-radius:8px;padding:20px}
+.stat-card .stat-label{font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:6px}
+.stat-card .stat-value{font-size:26px;font-weight:700;color:var(--ink)}
+.stat-card .stat-sub{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.tool-card{border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;transition:all .15s;text-decoration:none;color:var(--ink);display:block}
+.tool-card:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(26,107,60,.1)}
+.tool-card .t-icon{font-size:24px;margin-bottom:10px}
+.tool-card h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.tool-card p{font-size:12px;color:var(--ink-soft)}
+.tool-card .t-badge{font-size:10px;font-family:var(--mono);background:var(--accent-lt);color:var(--accent);padding:2px 7px;border-radius:10px;display:inline-block;margin-top:8px}
+.tool-card.locked{opacity:.5;cursor:not-allowed}
+.tool-card.locked:hover{border-color:var(--border);box-shadow:none}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);color:rgba(255,255,255,.6);padding:40px;text-align:center;font-size:13px;margin-top:80px}
+footer a{color:rgba(255,255,255,.8);text-decoration:none}
+
+/* ── Spinner ── */
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Tally<span>Suite</span></div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#" onclick="openModal()">Login</a>
+    <a href="#" class="btn btn-primary" onclick="openModal('signup')">Start Free Trial</a>
+  </div>
+</nav>
+
+<!-- LANDING PAGE -->
+<div id="landingPage">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-tag">Made for Indian Businesses</div>
+    <h1>Smart tools for<br><span>Tally Prime</span></h1>
+    <p>Import bank statements, push vouchers directly to Tally, and reconcile GST — all from your browser.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn btn-green btn-lg" onclick="openModal('signup')">Start 30-Day Free Trial</a>
+      <a href="#features" class="btn btn-outline btn-lg">See Features</a>
+    </div>
+    <div class="hero-note">No credit card required · Works with Tally Prime Silver & Gold</div>
+  </div>
+
+  <!-- Features -->
+  <div class="section" id="features" style="background:var(--paper);max-width:100%;padding:64px 40px">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-tag">Features</div>
+    <h2>Everything your accountant needs</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon">🏦</div>
+        <h3>Bank Statement Import</h3>
+        <p>Upload XLS/XLSX bank statements from any Indian bank. Auto-detects columns, creates Receipt/Payment vouchers.</p>
+        <span class="badge">All banks supported</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">⚡</div>
+        <h3>Live Tally Push</h3>
+        <p>Send vouchers directly into Tally Prime with one click. No manual XML import, no file saving.</p>
+        <span class="badge">Tally Prime ready</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📦</div>
+        <h3>Bulk Voucher Import</h3>
+        <p>Upload hundreds of sales/purchase entries from Excel. Map columns once, import forever.</p>
+        <span class="badge">Coming soon</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🔐</div>
+        <h3>Secure & Private</h3>
+        <p>Files processed in your browser. Your financial data never touches our servers.</p>
+        <span class="badge">100% private</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🧾</div>
+        <h3>GST Reconciliation</h3>
+        <p>Match GSTR-2B with your purchase register. Find mismatches before filing.</p>
+        <span class="badge">Coming soon</span>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🏢</div>
+        <h3>Multi-Company</h3>
+        <p>Manage multiple Tally companies from one dashboard. Switch in one click.</p>
+        <span class="badge">Pro plan</span>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Pricing -->
+  <div class="section" id="pricing">
+    <div class="section-tag">Pricing</div>
+    <h2>Simple, honest pricing</h2>
+    <div class="pricing-grid" id="pricingGrid">
+      <!-- Loaded dynamically from server -->
+      <div class="plan-card">
+        <div class="plan-name">Trial</div>
+        <div class="plan-price">₹0 <span>/ 30 days</span></div>
+        <div class="plan-desc">Try everything free</div>
+        <ul class="plan-features">
+          <li>Bank statement import</li>
+          <li>Live Tally push</li>
+          <li>1 company</li>
+          <li>Email support</li>
+        </ul>
+        <a href="#" class="btn btn-outline btn-block" onclick="openModal('signup')">Start Free Trial</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">₹499 <span>/ month</span></div>
+        <div class="plan-desc">For small businesses & CAs</div>
+        <ul class="plan-features">
+          <li>Bank statement import</li>
+          <li>Live Tally push</li>
+          <li>1 company</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-green btn-block" onclick="openModal('signup')">Get Started</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">₹999 <span>/ month</span></div>
+        <div class="plan-desc">For CA firms & large businesses</div>
+        <ul class="plan-features">
+          <li>Everything in Starter</li>
+          <li>Bulk voucher import</li>
+          <li>GST reconciliation</li>
+          <li>3 companies</li>
+          <li>WhatsApp support</li>
+        </ul>
+        <a href="#" class="btn btn-outline btn-block" onclick="openModal('signup')">Get Pro</a>
+      </div>
+    </div>
+    <p style="margin-top:20px;font-size:13px;color:var(--ink-faint);text-align:center">All plans include Tally Bridge agent download · Cancel anytime · GST invoice provided</p>
+  </div>
+
+</div><!-- /landingPage -->
+
+<!-- DASHBOARD (shown after login) -->
+<div id="dashboard">
+  <div class="dash-header">
+    <div>
+      <h2 id="dashName">Welcome back</h2>
+      <div style="font-size:13px;color:var(--ink-soft);margin-top:2px" id="dashEmail"></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="status-pill" id="dashPill">Trial</span>
+      <button class="btn btn-outline" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="stat-card">
+      <div class="stat-label">Status</div>
+      <div class="stat-value" id="dashStatus">—</div>
+      <div class="stat-sub" id="dashDays"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Plan</div>
+      <div class="stat-value" id="dashPlan">—</div>
+      <div class="stat-sub" id="dashPlanSub"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Tally Bridge</div>
+      <div class="stat-value" id="bridgeStatus">—</div>
+      <div class="stat-sub"><a href="tally_bridge.exe" id="bridgeDl" style="color:var(--accent);font-size:12px">Download bridge →</a></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:16px;font-size:13px;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase">Your Tools</div>
+  <div class="tool-grid">
+    <a href="bank_to_tally.html" class="tool-card">
+      <div class="t-icon">🏦</div>
+      <h3>Bank → Tally Import</h3>
+      <p>Convert bank statements and push to Tally Prime</p>
+      <span class="t-badge">Active</span>
+    </a>
+    <div class="tool-card locked" title="Upgrade to Pro">
+      <div class="t-icon">📦</div>
+      <h3>Bulk Voucher Import</h3>
+      <p>Sales &amp; purchase vouchers in bulk</p>
+      <span class="t-badge">Pro plan</span>
+    </div>
+    <div class="tool-card locked" title="Coming soon">
+      <div class="t-icon">🧾</div>
+      <h3>GST Reconciliation</h3>
+      <p>GSTR-2B vs purchase register matching</p>
+      <span class="t-badge">Coming soon</span>
+    </div>
+    <div class="tool-card" onclick="showUpgrade()">
+      <div class="t-icon">⬆️</div>
+      <h3>Upgrade Plan</h3>
+      <p>Get Pro for bulk import, GST recon &amp; more</p>
+      <span class="t-badge">View plans</span>
+    </div>
+  </div>
+
+  <div id="upgradeSection" style="display:none;margin-top:32px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:16px">Upgrade your plan</div>
+    <div class="pricing-grid" style="max-width:700px">
+      <div class="plan-card featured">
+        <div class="plan-badge">Recommended</div>
+        <div class="plan-name">Starter Monthly</div>
+        <div class="plan-price">₹499 <span>/ month</span></div>
+        <ul class="plan-features">
+          <li>Bank import + Tally push</li><li>1 company</li><li>Priority support</li>
+        </ul>
+        <button class="btn btn-green btn-block" onclick="subscribe('starter_monthly')">Subscribe ₹499/mo</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Pro Monthly</div>
+        <div class="plan-price">₹999 <span>/ month</span></div>
+        <ul class="plan-features">
+          <li>Everything in Starter</li><li>Bulk import</li><li>GST recon</li><li>3 companies</li>
+        </ul>
+        <button class="btn btn-outline btn-block" onclick="subscribe('pro_monthly')">Subscribe ₹999/mo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="overlay" id="authOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Tally<span style="color:var(--accent)">Suite</span></h2>
+    <p>Smart Tally tools for Indian businesses</p>
+    <div class="tabs">
+      <button class="tab active" id="tabLogin"  onclick="switchTab('login')">Login</button>
+      <button class="tab"        id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="loginForm">
+      <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="loginPwd" placeholder="Password"></div>
+      <button class="btn btn-primary btn-block" id="loginBtn" onclick="doLogin()">Login</button>
+      <div class="form-msg" id="loginMsg"></div>
+    </div>
+
+    <!-- Signup form -->
+    <div id="signupForm" style="display:none">
+      <div class="form-group"><label>Full Name</label><input type="text" id="signupName" placeholder="Bhagirath Sharma"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com"></div>
+      <div class="form-group"><label>Phone (optional)</label><input type="tel" id="signupPhone" placeholder="9876543210"></div>
+      <div class="form-group"><label>Password</label><input type="password" id="signupPwd" placeholder="Min 8 characters"></div>
+      <button class="btn btn-green btn-block" id="signupBtn" onclick="doSignup()">Start Free Trial</button>
+      <div class="form-msg" id="signupMsg"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="margin-bottom:8px;font-weight:600;color:#fff">TallySuite</div>
+  Made in India · For Indian businesses using Tally Prime<br>
+  <div style="margin-top:12px;font-size:12px">
+    <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="mailto:support@tallysuite.in">support@tallysuite.in</a>
+  </div>
+</footer>
+
+<script>
+var SERVER = 'http://localhost:8100'; // ← change to your server URL
+var session = null;
+
+function getMachineId(){
+  var k='b2t_mid',id=localStorage.getItem(k);
+  if(!id){id=btoa([navigator.language,screen.width+'x'+screen.height,navigator.platform].join('|')+Math.random()).replace(/[^a-zA-Z0-9]/g,'').slice(0,32);localStorage.setItem(k,id);}
+  return id;
+}
+
+// ── Modal ────────────────────────────────────────────────────────────────────
+function openModal(tab){
+  document.getElementById('authOverlay').classList.add('open');
+  if(tab) switchTab(tab);
+}
+function closeModal(){ document.getElementById('authOverlay').classList.remove('open'); }
+document.getElementById('authOverlay').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+
+function switchTab(t){
+  document.getElementById('loginForm').style.display  = t==='login'  ? '' : 'none';
+  document.getElementById('signupForm').style.display = t==='signup' ? '' : 'none';
+  document.getElementById('tabLogin').className  = 'tab'+(t==='login'?' active':'');
+  document.getElementById('tabSignup').className = 'tab'+(t==='signup'?' active':'');
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+async function doSignup(){
+  var btn=document.getElementById('signupBtn'),msg=document.getElementById('signupMsg');
+  var name=document.getElementById('signupName').value.trim();
+  var email=document.getElementById('signupEmail').value.trim();
+  var phone=document.getElementById('signupPhone').value.trim();
+  var pwd=document.getElementById('signupPwd').value;
+  if(!name||!email||!pwd){ msg.className='form-msg err'; msg.textContent='Please fill all fields.'; return; }
+  if(pwd.length<8){ msg.className='form-msg err'; msg.textContent='Password must be at least 8 characters.'; return; }
+  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Creating account…';
+  try{
+    var res=await fetch(SERVER+'/api/payment/signup',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,name,phone,password:pwd,machine_id:getMachineId()})});
+    var data=await res.json();
+    if(res.ok){
+      msg.className='form-msg ok'; msg.textContent='✓ Account created! Logging you in…';
+      saveSession(data); setTimeout(function(){ closeModal(); showDashboard(data); },900);
+    } else {
+      msg.className='form-msg err'; msg.textContent='✗ '+(data.detail||'Signup failed.');
+    }
+  }catch(e){ msg.className='form-msg err'; msg.textContent='✗ Cannot reach server.'; }
+  btn.disabled=false; btn.innerHTML='Start Free Trial';
+}
+
+async function doLogin(){
+  var btn=document.getElementById('loginBtn'),msg=document.getElementById('loginMsg');
+  var email=document.getElementById('loginEmail').value.trim();
+  var pwd=document.getElementById('loginPwd').value;
+  if(!email||!pwd){ msg.className='form-msg err'; msg.textContent='Please enter email and password.'; return; }
+  btn.disabled=true; btn.innerHTML='<span class="sp"></span>Logging in…';
+  try{
+    var res=await fetch(SERVER+'/api/payment/login',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pwd,machine_id:getMachineId()})});
+    var data=await res.json();
+    if(res.ok){
+      saveSession(data); closeModal(); showDashboard(data);
+    } else {
+      msg.className='form-msg err'; msg.textContent='✗ '+(data.detail||'Login failed.');
+    }
+  }catch(e){ msg.className='form-msg err'; msg.textContent='✗ Cannot reach server.'; }
+  btn.disabled=false; btn.innerHTML='Login';
+}
+
+function saveSession(data){ session=data; localStorage.setItem('ts_session',JSON.stringify(data)); }
+function logout(){ session=null; localStorage.removeItem('ts_session'); location.reload(); }
+
+// ── Dashboard ────────────────────────────────────────────────────────────────
+function showDashboard(data){
+  document.getElementById('landingPage').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  document.getElementById('dashName').textContent='Welcome, '+data.name;
+  document.getElementById('dashEmail').textContent=data.email;
+
+  var status=data.status||'trial';
+  var pill=document.getElementById('dashPill');
+  pill.textContent=status.charAt(0).toUpperCase()+status.slice(1);
+  pill.className='status-pill pill-'+(status==='active'?'active':status==='trial'?'trial':'expired');
+
+  document.getElementById('dashStatus').textContent=status.charAt(0).toUpperCase()+status.slice(1);
+  document.getElementById('dashDays').textContent=
+    status==='trial' ? (data.days_remain||0)+' days remaining in trial' :
+    status==='active'? 'Active subscription' : 'Trial expired — please subscribe';
+
+  var planKey=data.plan_key||'trial';
+  document.getElementById('dashPlan').textContent=
+    planKey==='trial'?'Free Trial': planKey.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
+  document.getElementById('dashPlanSub').textContent=
+    data.period_end ? 'Renews '+new Date(data.period_end).toLocaleDateString('en-IN') : '30 days free';
+
+  document.getElementById('bridgeStatus').textContent='Not connected';
+  checkBridgeStatus();
+}
+
+async function checkBridgeStatus(){
+  try{
+    var res=await fetch(SERVER+'/api/tally/status');
+    var data=await res.json();
+    document.getElementById('bridgeStatus').textContent=data.connected?'✓ Connected':'Not connected';
+  }catch(e){}
+}
+
+function showUpgrade(){
+  var s=document.getElementById('upgradeSection');
+  s.style.display=s.style.display==='none'?'':'none';
+}
+
+async function subscribe(planKey){
+  if(!session){ openModal('login'); return; }
+  try{
+    var res=await fetch(SERVER+'/api/payment/subscribe',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({customer_id:session.customer_id,plan_key:planKey})});
+    var data=await res.json();
+    if(res.ok && data.razorpay_sub_id){
+      // Open Razorpay checkout
+      var options={
+        key:      data.razorpay_key,
+        subscription_id: data.razorpay_sub_id,
+        name:     'TallySuite',
+        description: data.plan_name,
+        prefill:  {email: session.email, name: session.name},
+        theme:    {color:'#1a6b3c'},
+        handler:  function(resp){ alert('Payment successful! Your plan is now active.'); location.reload(); }
+      };
+      var rzp=new Razorpay(options);
+      rzp.open();
+    }
+  }catch(e){ alert('Error: '+e.message); }
+}
+
+// ── Auto-login from session ───────────────────────────────────────────────────
+window.addEventListener('load',function(){
+  var saved=localStorage.getItem('ts_session');
+  if(saved){
+    try{
+      var data=JSON.parse(saved);
+      session=data;
+      showDashboard(data);
+      // Refresh status from server
+      fetch(SERVER+'/api/payment/status/'+data.customer_id)
+        .then(r=>r.json()).then(function(fresh){ showDashboard({...data,...fresh}); }).catch(function(){});
+    }catch(e){ localStorage.removeItem('ts_session'); }
+  }
+});
+
+// Enter key handlers
+['loginPwd'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
+});
+['signupPwd'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',function(e){ if(e.key==='Enter') doSignup(); });
+});
+</script>
+
+<!-- Razorpay SDK — loads only when needed -->
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+</body>
+</html>
