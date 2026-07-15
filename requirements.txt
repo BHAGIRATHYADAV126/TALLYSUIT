@@ -6,3 +6,7 @@ pydantic
 httpx
 websockets
 razorpay
+pandas
+openpyxl
+xlrd
+python-multipart
