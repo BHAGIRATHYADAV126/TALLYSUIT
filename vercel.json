@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "portal.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "bank_to_tally.html", 
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/portal.html" },
+    { "src": "/tool", "dest": "/bank_to_tally.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
