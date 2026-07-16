@@ -55,7 +55,7 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--ink-fa
     <div class="ey">Tally Suite</div>
     <h1>Bank Statement → Tally XML</h1>
   </div>
-  <a href="/auth/logout" class="logout">Logout</a>
+  <a id="logoutBtn" href="#" onclick="doLogout()" class="logout">Logout</a>
 </header>
 
 <div class="card">
@@ -99,6 +99,11 @@ footer{margin-top:28px;font-family:var(--mono);font-size:11px;color:var(--ink-fa
 <footer>Conversion runs on server — your source code is fully protected</footer>
 
 <script>
+// Auto-detect API server
+var API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:8100'
+  : 'https://tallysuit.onrender.com';
+
 var selectedFile = null;
 
 // ── Logging ───────────────────────────────────────────────────────────────────
@@ -159,7 +164,7 @@ async function doConvert() {
   log('🔄 Sending file to server…', 'li');
 
   try {
-    var res = await fetch('/api/convert', {
+    var res = await fetch(API + '/api/convert', {
       method: 'POST',
       body:   buildForm(),
     });
@@ -211,7 +216,7 @@ async function doSend() {
     var fd = buildForm();
     fd.append('tally_url', document.getElementById('tallyUrl').value.trim() || 'http://localhost:9900');
 
-    var res = await fetch('/api/convert/push', {
+    var res = await fetch(API + '/api/convert/push', {
       method: 'POST',
       body:   fd,
     });
@@ -255,7 +260,7 @@ async function testConn() {
   var tal = document.getElementById('tallyUrl').value.trim() || 'http://localhost:9900';
   st.style.color = 'var(--ink-faint)'; st.textContent = 'Testing…';
   try {
-    var res  = await fetch('/api/tally/status?tally_url=' + encodeURIComponent(tal));
+    var res  = await fetch(API + '/api/tally/status?tally_url=' + encodeURIComponent(tal));
     var data = await res.json();
     if(data.connected) {
       st.style.color = 'var(--accent)';
@@ -268,6 +273,12 @@ async function testConn() {
     st.style.color = '#b84c00';
     st.textContent = '✗ ' + e.message;
   }
+}
+
+function doLogout(){
+  fetch(API + '/auth/logout', {credentials:'include'})
+    .then(function(){ window.location.href = API + '/login'; })
+    .catch(function(){ window.location.href = API + '/login'; });
 }
 </script>
 </body>
